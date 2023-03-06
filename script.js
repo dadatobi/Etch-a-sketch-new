@@ -1,46 +1,53 @@
+'use stict';
+
 const container = document.querySelector('.container');
-const sizeEl = document.querySelector('.size');
-let size = sizeEl.value;
+const gridNum = document.querySelector('.size');
 const color = document.querySelector('.color');
-const resetBtn = document.querySelector('.btn');
+const btn = document.querySelector('.btn');
 
 let draw = false;
 
-function populate(size) {
-    if (size > 100 || size < 8){
-        alert(`enter a value between 100 and 8`);
-        return;
-    }else {
-        container.style.setProperty("--size", size);
-    for (i = 0; i <size*size; i++) {
-        const div = document.createElement('div');
-        div.classList.add('pixel');
-        container.appendChild(div);
+function makeGrid(grid) {
+  if (grid > 100 || grid < 6) {
+    alert(`choose a value between 100 and 6, both inclusive`);
+    makeGrid(30);
+  } else {
+    for (let i = 0; i < grid; i++) {
+      let makeRow = document.createElement('div');
+      makeRow.classList.add('row');
+      container.appendChild(makeRow);
+      for (let i = 0; i < grid; i++) {
+        let makeColumn = document.createElement('div');
+        makeColumn.classList.add('col');
+        // makeColumn.textContent = 'a';
+        // console.log('a');
 
-        div.addEventListener('mouseover', () => {
-            if(!draw) return;
-            div.style.backgroundColor = color.value
+        makeColumn.addEventListener('mouseover', () => {
+          if (!draw) return;
+          makeColumn.style.backgroundColor = color.value;
         });
 
-        div.addEventListener('mousedown', () => {
-            div.style.backgroundColor = color.value
+        makeRow.appendChild(makeColumn);
+        makeColumn.addEventListener('mousedown', () => {
+          makeColumn.style.backgroundColor = color.value;
         });
+      }
     }
-    }
+  }
 }
 
-window.addEventListener('mousedown', ()=> {
-    draw = true;
+makeGrid(gridNum.value);
+btn.addEventListener('click', function () {
+  container.innerHTML = '';
+  size = gridNum.value;
+  makeGrid(size);
+  // gridBox.style.style.backgroundColor;
 });
 
-window.addEventListener('mouseup', ()=> {
-    draw = false;
-})
+window.addEventListener('mousedown', () => {
+  draw = true;
+});
 
-resetBtn.addEventListener('click', ()=> {
-    container.innerHTML= "";
-    size = sizeEl.value
-    populate(size);
-})
-
-populate(size);
+window.addEventListener('mouseup', () => {
+  draw = false;
+});
